@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅 페이지</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>채팅 페이지입니다.</h2>
+    <input type="text" id="message" placeholder="메시지를 입력하세요">
+    <button id="send">메시지 보내기</button>
+    <div id="chat-log"></div>
+
+    <script>
+        // 서버와 소켓 연결
+        const socket = io();
+
+        // 서버로부터 메시지를 받을 때
+        socket.on('chat message', (msg) => {
+            const chatLog = document.getElementById('chat-log');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = msg;
+            chatLog.appendChild(newMessage);
+        });
+
+        // 버튼 클릭 시 메시지 전송
+        document.getElementById('send').onclick = () => {
+            const message = document.getElementById('message').value;
+            socket.emit('chat message', message); // 서버로 메시지 전송
+        };
+    </script>
+</body>
+</html>
